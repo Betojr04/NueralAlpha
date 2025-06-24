@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neural Alpha</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <h1>Neural Alpha</h1>
+    </header>
+
+    <main>
+        <section class="input-section">
+            <h2>Enter Theme, Stock, Market Signal</h2>
+            <form id="tradeForm">
+                <input type="text" id="userInput" placeholder="Ex: NVDA, inflation, earnings season" required>
+                <button type="submit">Generate Idea</button>
+            </form>
+            <div id="loadingSpinner" class="spinner hidden"></div>
+        </section>
+
+        <section class="output-section hidden" id="results">
+            <h2>AI-Generated Trade Idea</h2>
+            <div class="output-card" id="thesis">
+                <h3>Thesis</h3>
+                <p>Waiting for result...</p>
+            </div>
+            <div class="output-card" id="strategy">
+                <h3>Selected Strategy</h3>
+                <p>Waiting for result...</p>
+            </div>
+            <div class="output-card" id="backtest">
+                <h3>Backtest Simulation</h3>
+                <canvas id="backtestChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Neural Alpha </p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('tradeForm');
+        const spinner = document.getElementById('loadingSpinner');
+        const results = document.getElementById('results');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            spinner.classList.remove('hidden');
+            results.classList.add('hidden');
+
+            // Replace with actual fetch call to backend
+            setTimeout(() => {
+                document.getElementById('thesis').querySelector('p').textContent = "some thesis";
+                document.getElementById('strategy').querySelector('p').textContent = "some strategy";
+                spinner.classList.add('hidden');
+                results.classList.remove('hidden');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
