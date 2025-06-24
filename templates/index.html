@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Neural Alpha</title>
+    <title>Neural Alpha | Trade Intelligence Engine</title>
     <link rel="stylesheet" href="/static/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <header>
         <h1>Neural Alpha</h1>
+        <p class="tagline">From signal to strategy.</p>
     </header>
 
     <main>
         <section class="input-section">
-            <h2>Enter Theme, Stock, Market Signal</h2>
+            <h2>Enter a Theme, Stock, or Market Signal</h2>
             <form id="tradeForm">
-                <input type="text" id="userInput" placeholder="Ex: NVDA, inflation, earnings season" required>
+                <input type="text" id="userInput" placeholder="e.g. NVDA, inflation, earnings season" required>
+                <!-- <select id="signalType">
+                    <option value="sentiment">Sentiment</option>
+                    <option value="earnings">Earnings</option>
+                    <option value="macro">Macroeconomic</option>
+                    <option value="technical">Technical</option>
+                </select> -->
                 <button type="submit">Generate Idea</button>
             </form>
             <div id="loadingSpinner" class="spinner hidden"></div>
@@ -39,7 +46,7 @@
     </main>
 
     <footer>
-        <p>© 2025 Neural Alpha </p>
+        <p>© 2025 Neural Alpha</p>
     </footer>
 
     <script>
@@ -52,14 +59,54 @@
             spinner.classList.remove('hidden');
             results.classList.add('hidden');
 
-            // Replace with actual fetch call to backend
-            setTimeout(() => {
-                document.getElementById('thesis').querySelector('p').textContent = "some thesis";
-                document.getElementById('strategy').querySelector('p').textContent = "some strategy";
+            const symbol = document.getElementById('userInput').value.trim();
+            if (!symbol) return;
+
+            try {
+                const res = await fetch(`/quote?symbol=${encodeURIComponent(symbol)}`);
+                const data = await res.json();
+
+                if (data.error) throw new Error(data.error);
+
+                document.getElementById('thesis').querySelector('p').textContent =
+                    `Recent price for ${data.symbol}: $${data.price}. Volume: ${data.volume}.`;
+
+                document.getElementById('strategy').querySelector('p').textContent =
+                    `Change: ${data.change_percent}. Consider watching technical signals before entry.`;
+
+                // Optional: you can draw a dummy backtest graph or integrate real data here
                 spinner.classList.add('hidden');
                 results.classList.remove('hidden');
-            }, 1000);
+            } catch (err) {
+                spinner.classList.add('hidden');
+                alert('Error: ' + err.message);
+            }
         });
+
+            // Optional: Initialize a dummy chart
+            const ctx = document.getElementById('backtestChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'Dummy Backtest',
+                        data: [10, 20, 15, 25, 30],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
     </script>
 </body>
 </html>
