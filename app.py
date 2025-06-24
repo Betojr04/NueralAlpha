@@ -1,6 +1,6 @@
 from flask import Flask
 from routes.home import home_bp
-from routes.api import api_bp
+from routes.api import api
 
 
 def create_app():
@@ -8,7 +8,7 @@ def create_app():
 
     # Register blueprints
     app.register_blueprint(home_bp)
-    app.register_blueprint(api_bp, url_prefix="/api")
+    app.register_blueprint(api)
 
     return app
 
