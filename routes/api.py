@@ -15,7 +15,7 @@ def quote():
         quote = data.get("Global Quote", {})
 
         if not quote:
-            return jsonify({"error": "No quote data found for that symbol"}), 404
+            return jsonify({"error": "Not a valid symbol, please try again."}), 404
 
         # Optional: return simplified result
         simplified = {
