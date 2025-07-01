@@ -94,3 +94,18 @@ footer {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+a {
+  color: #00c896;  
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #ffffff;  
+}
+
+.error {
+  color: #ff4d4d;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

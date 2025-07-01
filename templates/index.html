@@ -10,6 +10,12 @@
     <header>
       <h1>Neural Alpha | Trade Intelligence Engine</h1>
       <p class="tagline">From signal to strategy.</p>
+
+      {% if user %}
+        <p class="user-bar">Welcome, {{ user }} | <a href="/logout">Logout</a></p>
+      {% else %}
+        <p class="user-bar"><a href="/login">Login</a> | <a href="/signup">Sign Up</a></p>
+      {% endif %}
     </header>
 
     <main>
@@ -22,12 +28,6 @@
             placeholder="e.g. NVDA, inflation, earnings season"
             required
           />
-          <!-- <select id="signalType">
-                    <option value="sentiment">Sentiment</option>
-                    <option value="earnings">Earnings</option>
-                    <option value="macro">Macroeconomic</option>
-                    <option value="technical">Technical</option>
-                </select> -->
           <button type="submit">Generate Idea</button>
         </form>
         <div id="loadingSpinner" class="spinner hidden"></div>
@@ -35,6 +35,7 @@
 
       <section class="output-section hidden" id="results">
         <h2>AI-Generated Trade Idea</h2>
+
         <div class="output-card" id="quoteResults">
           <h3>Quote Summary</h3>
           <p>Waiting for quote...</p>
@@ -44,10 +45,12 @@
           <h3>Thesis</h3>
           <p>Waiting for result...</p>
         </div>
+
         <div class="output-card" id="strategy">
           <h3>Selected Strategy</h3>
           <p>Waiting for result...</p>
         </div>
+
         <div class="output-card" id="backtest">
           <h3>Backtest Simulation</h3>
           <canvas id="backtestChart"></canvas>
@@ -80,25 +83,20 @@
 
           if (data.error) throw new Error(data.error);
 
-          // New: Raw Quote Summary
           document
             .getElementById("quoteResults")
-            .querySelector(
-              "p"
-            ).textContent = `Quote for ${data.symbol}: $${data.price}, Volume: ${data.volume}, Change: ${data.change_percent}`;
+            .querySelector("p").textContent =
+            `Quote for ${data.symbol}: $${data.price}, Volume: ${data.volume}, Change: ${data.change_percent}`;
 
-          // Existing: Thesis and Strategy
           document
             .getElementById("thesis")
-            .querySelector(
-              "p"
-            ).textContent = `Recent price for ${data.symbol}: $${data.price}. Volume: ${data.volume}.`;
+            .querySelector("p").textContent =
+            `Recent price for ${data.symbol}: $${data.price}. Volume: ${data.volume}.`;
 
           document
             .getElementById("strategy")
-            .querySelector(
-              "p"
-            ).textContent = `Change: ${data.change_percent}. Consider watching technical signals before entry.`;
+            .querySelector("p").textContent =
+            `Change: ${data.change_percent}.`;
 
           spinner.classList.add("hidden");
           results.classList.remove("hidden");
@@ -108,7 +106,6 @@
         }
       });
 
-      // Dummy Chart.js backtest (can be replaced with real data later)
       const ctx = document.getElementById("backtestChart").getContext("2d");
       new Chart(ctx, {
         type: "line",
