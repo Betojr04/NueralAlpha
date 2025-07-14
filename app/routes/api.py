@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from services.alpha_service import get_latest_quote
+from ..services.alpha_service import get_latest_quote
 
 api = Blueprint("api", __name__)
 
