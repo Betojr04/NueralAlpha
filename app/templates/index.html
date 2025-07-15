@@ -10,6 +10,11 @@
     <header>
       <h1>Neural Alpha | Trade Intelligence Engine</h1>
       <p class="tagline">From signal to strategy.</p>
+
+      <p class="user-bar" id="user-greeting" style="display: none">
+        Welcome, <span id="user-email"></span> |
+        <a href="#" onclick="logout()">Logout</a>
+      </p>
     </header>
 
     <main>
@@ -22,12 +27,6 @@
             placeholder="e.g. NVDA, inflation, earnings season"
             required
           />
-          <!-- <select id="signalType">
-                    <option value="sentiment">Sentiment</option>
-                    <option value="earnings">Earnings</option>
-                    <option value="macro">Macroeconomic</option>
-                    <option value="technical">Technical</option>
-                </select> -->
           <button type="submit">Generate Idea</button>
         </form>
         <div id="loadingSpinner" class="spinner hidden"></div>
@@ -35,6 +34,7 @@
 
       <section class="output-section hidden" id="results">
         <h2>AI-Generated Trade Idea</h2>
+
         <div class="output-card" id="quoteResults">
           <h3>Quote Summary</h3>
           <p>Waiting for quote...</p>
@@ -44,10 +44,12 @@
           <h3>Thesis</h3>
           <p>Waiting for result...</p>
         </div>
+
         <div class="output-card" id="strategy">
           <h3>Selected Strategy</h3>
           <p>Waiting for result...</p>
         </div>
+
         <div class="output-card" id="backtest">
           <h3>Backtest Simulation</h3>
           <canvas id="backtestChart"></canvas>
@@ -60,6 +62,38 @@
     </footer>
 
     <script>
+      const token = localStorage.getItem("access_token");
+
+      async function fetchUser() {
+        if (!token) {
+          window.location.href = "/login";
+          return;
+        }
+
+        const res = await fetch("/dashboard-data", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem("access_token");
+          window.location.href = "/login";
+          return;
+        }
+
+        const data = await res.json();
+        document.getElementById("user-email").textContent = data.email;
+        document.getElementById("user-greeting").style.display = "block";
+      }
+
+      function logout() {
+        localStorage.removeItem("access_token");
+        window.location.href = "/";
+      }
+
+      fetchUser();
+
       const form = document.getElementById("tradeForm");
       const spinner = document.getElementById("loadingSpinner");
       const results = document.getElementById("results");
@@ -80,14 +114,12 @@
 
           if (data.error) throw new Error(data.error);
 
-          // New: Raw Quote Summary
           document
             .getElementById("quoteResults")
             .querySelector(
               "p"
             ).textContent = `Quote for ${data.symbol}: $${data.price}, Volume: ${data.volume}, Change: ${data.change_percent}`;
 
-          // Existing: Thesis and Strategy
           document
             .getElementById("thesis")
             .querySelector(
@@ -96,9 +128,7 @@
 
           document
             .getElementById("strategy")
-            .querySelector(
-              "p"
-            ).textContent = `Change: ${data.change_percent}. Consider watching technical signals before entry.`;
+            .querySelector("p").textContent = `Change: ${data.change_percent}.`;
 
           spinner.classList.add("hidden");
           results.classList.remove("hidden");
@@ -108,7 +138,6 @@
         }
       });
 
-      // Dummy Chart.js backtest (can be replaced with real data later)
       const ctx = document.getElementById("backtestChart").getContext("2d");
       new Chart(ctx, {
         type: "line",

@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from ..services.alpha_service import get_latest_quote
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 
 api = Blueprint("api", __name__)
 
@@ -29,3 +31,15 @@ def quote():
         return jsonify(simplified)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@api.route("/dashboard-data", methods=["GET"])
+@jwt_required()
+def dashboard_data():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify({"email": user.email})
