@@ -9,7 +9,7 @@ header {
     text-align: center;
     padding: 2rem;
     background: #1e1e1e;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .tagline {
@@ -28,7 +28,9 @@ main {
     margin-bottom: 2rem;
 }
 
-input, select, button {
+input,
+select,
+button {
     margin: 0.5rem;
     padding: 0.75rem;
     border: none;
@@ -36,7 +38,8 @@ input, select, button {
     font-size: 1rem;
 }
 
-input, select {
+input,
+select {
     width: 60%;
     max-width: 300px;
 }
@@ -60,7 +63,7 @@ button:hover {
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,255,204,0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.15);
 }
 
 footer {
@@ -87,15 +90,25 @@ footer {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 a {
+<<<<<<< HEAD:static/styles.css
   color: #00c896;  
   text-decoration: underline;
 }
@@ -109,3 +122,18 @@ a:hover {
   font-weight: bold;
   margin-bottom: 10px;
 }
+=======
+    color: #00c896;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+.error {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+>>>>>>> 0436bb052f21c7d52a238566b5f43a85d0f33023:app/static/styles.css

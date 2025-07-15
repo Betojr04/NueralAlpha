@@ -1,7 +1,7 @@
 from flask import Flask
 from routes.home import home_bp
-from routes.api import api
-from routes.auth import auth_bp
+from app.routes.api import api
+from app.routes.auth import auth_bp
 import os
 from dotenv import load_dotenv
 

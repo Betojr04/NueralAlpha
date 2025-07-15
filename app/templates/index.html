@@ -11,11 +11,18 @@
       <h1>Neural Alpha | Trade Intelligence Engine</h1>
       <p class="tagline">From signal to strategy.</p>
 
+<<<<<<< HEAD:templates/index.html
       {% if user %}
         <p class="user-bar">Welcome, {{ user }} | <a href="/logout">Logout</a></p>
       {% else %}
         <p class="user-bar"><a href="/login">Login</a> | <a href="/signup">Sign Up</a></p>
       {% endif %}
+=======
+      <p class="user-bar" id="user-greeting" style="display: none">
+        Welcome, <span id="user-email"></span> |
+        <a href="#" onclick="logout()">Logout</a>
+      </p>
+>>>>>>> 0436bb052f21c7d52a238566b5f43a85d0f33023:app/templates/index.html
     </header>
 
     <main>
@@ -63,6 +70,38 @@
     </footer>
 
     <script>
+      const token = localStorage.getItem("access_token");
+
+      async function fetchUser() {
+        if (!token) {
+          window.location.href = "/login";
+          return;
+        }
+
+        const res = await fetch("/dashboard-data", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem("access_token");
+          window.location.href = "/login";
+          return;
+        }
+
+        const data = await res.json();
+        document.getElementById("user-email").textContent = data.email;
+        document.getElementById("user-greeting").style.display = "block";
+      }
+
+      function logout() {
+        localStorage.removeItem("access_token");
+        window.location.href = "/";
+      }
+
+      fetchUser();
+
       const form = document.getElementById("tradeForm");
       const spinner = document.getElementById("loadingSpinner");
       const results = document.getElementById("results");
@@ -95,8 +134,12 @@
 
           document
             .getElementById("strategy")
+<<<<<<< HEAD:templates/index.html
             .querySelector("p").textContent =
             `Change: ${data.change_percent}.`;
+=======
+            .querySelector("p").textContent = `Change: ${data.change_percent}.`;
+>>>>>>> 0436bb052f21c7d52a238566b5f43a85d0f33023:app/templates/index.html
 
           spinner.classList.add("hidden");
           results.classList.remove("hidden");
